@@ -38,7 +38,7 @@ public class Sputnokatik {
         	cnt++;
         }
         // until we have 6, we just hang out. accumulate a herd.
-        if (cnt < 6) {
+        if (cnt < 3) {
         	orderType = 0; // so we don't try moving anywhere
         	return this;
         }
@@ -69,11 +69,16 @@ public class Sputnokatik {
       // ATTACK FORMERING
 
       // NY PRODUKTION
-      //q.add(1);
+      q.add(GRUNT);
+      q.add(GRUNT);
+      q.add(HOVERCRAFT);
+      q.add(HOVERCRAFT);
+      q.add(ARTIL);
+      q.add(ARTIL);
     }
 
     unitBuilt++;
-		return 0;
+		return 1;
 	}
 
   public class BuildQ{
