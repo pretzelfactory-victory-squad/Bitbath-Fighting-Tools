@@ -1,11 +1,13 @@
 import java.util.Random;
+import java.lang.Math;
 
-public class Herd {
+public class Sputnokatik {
     public int orderType = 1; // always a move order
     public double destX, destY; // the move order will use these fields to communicate a destination
     Random r = new Random(); // help us randomize our actions
-
     public int[] radio = new int[4]; // we'll use this to communicate with other bots
+    public int unitBuilt = 0;
+    public BuildQ q = new BuildQ();
 
 	public static final int CITY = 0;
 	public static final int GRUNT = 1;
@@ -50,14 +52,68 @@ public class Herd {
 		// put the destination in there -- integer precision is good enough for this purpose
 		radio[1] = (int) destX;
 		radio[2] = (int) destY;
-		
+
 		return this;
 	}
 
 	public int build(double dx, double dy, double x, double y, int terrain, int id, int buildItem,
-    		double hp, double maxHP, double time,
+  		double hp, double maxHP, double time,
     		double[] objX, double[] objY, int[] objID, int[] objFaction, int[] objType, int[][] incomingRadio) {
-		if (buildItem != 0) return 0;
-		return 1 + r.nextInt(3);
+
+		if (buildItem != 0) {
+      // FORTSÄTT BYGGA
+      return 0;
+    } else if (q.isEmpty()){
+      // ATTACK ORDER
+    } else {
+      // ATTACK FORMERING
+
+      // NY PRODUKTION
+      //q.add(1);
+    }
+
+    unitBuilt++;
+		return 0;
 	}
+
+  public class BuildQ{
+
+    private static final int DEFAULT_CAPACITY = 10;
+    private int size;
+    private transient int[] data;
+
+    public BuildQ(){
+      data = new int[DEFAULT_CAPACITY];
+    }
+
+    public boolean add(int type){
+      if (size == data.length){
+        ensureCapacity(size + 1);
+      }
+      data[size++] = type;
+      return true;
+    }
+
+    public int buildUnit(){
+      int index = 0;
+      int r = data[index];
+      if (index != --size){
+        System.arraycopy(data, index + 1, data, index, size - index);
+      }
+      return r;
+    }
+
+    public void ensureCapacity(int minCapacity){
+      int current = data.length;
+      if (minCapacity > current){
+        int[] newData = new int[Math.max(current * 2, minCapacity)];
+        System.arraycopy(data, 0, newData, 0, size);
+        data = newData;
+      }
+    }
+
+    public boolean isEmpty(){
+      return size == 0;
+    }
+  }
 }
